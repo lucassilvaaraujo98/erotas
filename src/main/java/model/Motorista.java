@@ -4,19 +4,20 @@ import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name= "motorista")
 @DiscriminatorValue("MOTORISTA")
 @Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Motorista extends Usuario {
 
-    @Column(nullabe = false)
+    @Column(nullable = false)
     private boolean habilitado = false;
 
     public void aceitarSolicitacao(Solicitacao solicitacao){

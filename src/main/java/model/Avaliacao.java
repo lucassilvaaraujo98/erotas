@@ -1,13 +1,14 @@
 package model;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 
 // model/Avaliacao.java
 @Entity
 @Table(name = "avaliacao")
+@Getter
+@Setter
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
