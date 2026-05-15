@@ -29,7 +29,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         String authHeader = request.getHeader("Authorization");
-
+/*Ao fazer a requisição, deixar como no auth */
+                /* Criar as tabelas no db, criar um usuario admin*/
+                
+                /* excluir essa validação caso o erro no postman mencionar o header, se começar com bearer deixa a validação
+    se não, remover para teste --> remover a parte || !authHeader.startsWith("Bearer ")
+                */
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             chain.doFilter(request, response);
             return;
