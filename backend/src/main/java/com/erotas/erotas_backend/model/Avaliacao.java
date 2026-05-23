@@ -1,24 +1,22 @@
-package com.erotas.model;
+package com.erotas.erotas_backend.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.Id;
+import java.util.List;
 
 // model/Avaliacao.java
 @Entity
 @Table(name = "avaliacao")
-@Data
-@Setter
 @Getter
+@Setter
 @NoArgsConstructor
 public class Avaliacao {
 
-    @Id
+    @Id                                          // ← deve ter isso
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
