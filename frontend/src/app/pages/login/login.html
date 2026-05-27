@@ -1,1 +1,45 @@
-<p>login works!</p>
+<div class="login-container">
+  <div class="login-card">
+
+    <div class="logo">
+      <h1>🚗 e-Rotas</h1>
+      <p>Uma mão na roda pra quem precisa</p>
+    </div>
+
+    <form (ngSubmit)="entrar()">
+
+      <div class="campo">
+        <label>Email</label>
+        <input
+          type="email"
+          [(ngModel)]="email"
+          name="email"
+          placeholder="seu@email.com"
+          required/>
+      </div>
+
+      <div class="campo">
+        <label>Senha</label>
+        <input
+          type="password"
+          [(ngModel)]="senha"
+          name="senha"
+          placeholder="••••••"
+          required/>
+      </div>
+
+      <div class="erro" *ngIf="erro">{{ erro }}</div>
+
+      <button type="submit" [disabled]="carregando">
+        {{ carregando ? 'Entrando...' : 'Entrar' }}
+      </button>
+
+    </form>
+
+    <p class="link">
+      Não tem conta?
+      <a routerLink="/cadastro">Cadastre-se</a>
+    </p>
+
+  </div>
+</div>
