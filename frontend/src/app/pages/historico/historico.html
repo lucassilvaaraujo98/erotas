@@ -1,1 +1,47 @@
-<p>historico works!</p>
+<div class="page">
+
+  <nav class="navbar">
+    <div class="nav-logo">🚗 e-Rotas</div>
+    <div class="nav-links">
+      <button class="btn-nav" (click)="voltar()">← Caronas</button>
+      <button class="btn-sair" (click)="sair()">Sair</button>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <h2 class="titulo">📋 Meu Histórico</h2>
+
+    <div class="carregando" *ngIf="carregando">Carregando...</div>
+
+
+    <div class="mensagem" *ngIf="!carregando && mensagem ">
+      <p>{{ mensagem }}</p>
+      <button class="btn-buscar" (click)="voltar()">Buscar caronas</button>
+    </div>
+
+    <div class="lista">
+      <div class="card" *ngFor="let s of solicitacoes">
+
+        <div class="card-header">
+          <div class="rota">
+            <span class="origem">📍 {{ s.carona?.origem }}</span>
+            <span class="seta">→</span>
+            <span class="destino">🏁 {{ s.carona?.destino }}</span>
+          </div>
+          <span class="status" [class]="corStatus(s.status)">
+            {{ labelStatus(s.status) }}
+          </span>
+        </div>
+
+        <div class="card-info">
+          <span>🕐 {{ formatarData(s.carona?.dataHora) }}</span>
+          <span>👤 Motorista: {{ s.carona?.nomeMotorista }}</span>
+          <span>💺 Vagas: {{ s.carona?.vagasDisponiveis }}</span>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>

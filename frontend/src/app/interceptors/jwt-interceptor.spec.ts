@@ -1,17 +1,16 @@
-import { TestBed } from '@angular/core/testing';
 import { HttpInterceptorFn } from '@angular/common/http';
+import { inject } from '@angular/core';
+import { StorageService } from '../services/storage.service';
 
-import { jwtInterceptor } from './jwt-interceptor';
+export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
+  const storage = inject(StorageService);
+  const token = storage.getToken();
 
-describe('jwtInterceptor', () => {
-  const interceptor: HttpInterceptorFn = (req, next) =>
-    TestBed.runInInjectionContext(() => jwtInterceptor(req, next));
+  if (token) {
+    req = req.clone({
+      setHeaders: { Authorization: `Bearer ${token}` }
+    });
+  }
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-  });
-
-  it('should be created', () => {
-    expect(interceptor).toBeTruthy();
-  });
-});
+  return next(req);
+};

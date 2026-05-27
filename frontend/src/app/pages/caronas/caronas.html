@@ -1,1 +1,68 @@
-<p>caronas works!</p>
+<div class="page">
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-logo">🚗 e-Rotas</div>
+    <div class="nav-links">
+      <span class="nav-user">Olá, {{ nomeUsuario }}</span>
+      <button class="btn-nav" (click)="irParaSolicitacoes()">Solicitações</button>
+      <button class="btn-nav" (click)="irParaHistorico()">Histórico</button>
+      <button class="btn-sair" (click)="sair()">Sair</button>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <!-- Filtros -->
+    <div class="filtros-card">
+      <h2>Encontre uma carona</h2>
+      <div class="filtros">
+        <div class="campo">
+          <label>Origem</label>
+          <input
+            type="text"
+            [(ngModel)]="origem"
+            placeholder="Ex: Centro"
+            name="origem"/>
+        </div>
+        <div class="campo">
+          <label>Destino</label>
+          <input
+            type="text"
+            [(ngModel)]="destino"
+            placeholder="Ex: Porto"
+            name="destino"/>
+        </div>
+        <button class="btn-buscar" (click)="buscar()" [disabled]="carregando">
+          {{ carregando ? 'Buscando...' : '🔍 Buscar' }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Mensagem -->
+    <div class="mensagem" *ngIf="mensagem">{{ mensagem }}</div>
+
+    <!-- Lista de caronas -->
+    <div class="caronas-grid">
+      <div class="carona-card" *ngFor="let carona of caronas">
+        <div class="carona-rota">
+          <span class="origem">📍 {{ carona.origem }}</span>
+          <span class="seta">→</span>
+          <span class="destino">🏁 {{ carona.destino }}</span>
+        </div>
+        <div class="carona-info">
+          <span>🕐 {{ formatarData(carona.dataHora) }}</span>
+          <span>👤 {{ carona.nomeMotorista }}</span>
+          <span>💺 {{ carona.vagasDisponiveis }} vagas</span>
+        </div>
+        <button
+          class="btn-solicitar"
+          (click)="solicitar(carona.id)"
+          [disabled]="!carona.disponivel">
+          {{ carona.disponivel ? 'Solicitar carona' : 'Sem vagas' }}
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>

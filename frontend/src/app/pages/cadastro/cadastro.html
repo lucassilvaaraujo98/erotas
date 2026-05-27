@@ -1,1 +1,73 @@
-<p>cadastro works!</p>
+<div class="cadastro-container">
+  <div class="cadastro-card">
+
+    <div class="logo">
+      <h1>🚗 e-Rotas</h1>
+      <p>Crie sua conta</p>
+    </div>
+
+    <form (ngSubmit)="cadastrar()">
+
+      <div class="campo">
+        <label>Nome completo</label>
+        <input
+          type="text"
+          [(ngModel)]="nome"
+          name="nome"
+          placeholder="Seu nome"
+          required/>
+      </div>
+
+      <div class="campo">
+        <label>Email</label>
+        <input
+          type="email"
+          [(ngModel)]="email"
+          name="email"
+          placeholder="seu@email.com"
+          required/>
+      </div>
+
+      <div class="campo">
+        <label>Senha</label>
+        <input
+          type="password"
+          [(ngModel)]="senha"
+          name="senha"
+          placeholder="Mínimo 6 caracteres"
+          required/>
+      </div>
+
+      <div class="campo">
+        <label>Endereço</label>
+        <input
+          type="text"
+          [(ngModel)]="endereco"
+          name="endereco"
+          placeholder="Seu bairro ou endereço"/>
+      </div>
+
+      <div class="campo-check">
+        <input
+          type="checkbox"
+          [(ngModel)]="motorista"
+          name="motorista"
+          id="motorista"/>
+        <label for="motorista">Quero oferecer caronas como motorista</label>
+      </div>
+
+      <div class="erro" *ngIf="erro">{{ erro }}</div>
+
+      <button type="submit" [disabled]="carregando">
+        {{ carregando ? 'Cadastrando...' : 'Criar conta' }}
+      </button>
+
+    </form>
+
+    <p class="link">
+      Já tem conta?
+      <a routerLink="/login">Entrar</a>
+    </p>
+
+  </div>
+</div>

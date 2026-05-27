@@ -1,1 +1,55 @@
-<p>solicitacoes works!</p>
+<div class="page">
+
+  <nav class="navbar">
+    <div class="nav-logo">🚗 e-Rotas</div>
+    <div class="nav-links">
+      <button class="btn-nav" (click)="voltar()">← Caronas</button>
+      <button class="btn-sair" (click)="sair()">Sair</button>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <h2 class="titulo">🙋 Solicitações de Carona</h2>
+    <p class="subtitulo">Veja quem está precisando de carona na sua direção</p>
+
+    <div class="carregando" *ngIf="carregando">Carregando...</div>
+
+    <div class="mensagem" *ngIf="!carregando && mensagem">
+      {{ mensagem }}
+    </div>
+
+    <div class="lista" *ngIf="!carregando && solicitacoes.length > 0">
+      <div class="card" *ngFor="let s of solicitacoes">
+
+        <div class="card-header">
+          <div class="rota">
+            <span class="origem">📍 {{ s.carona?.origem }}</span>
+            <span class="seta">→</span>
+            <span class="destino">🏁 {{ s.carona?.destino }}</span>
+          </div>
+          <span class="status" [class]="corStatus(s.status)">
+            {{ labelStatus(s.status) }}
+          </span>
+        </div>
+
+        <div class="card-info">
+          <span>👤 Passageiro: {{ s.passageiro?.nome }}</span>
+          <span>📧 {{ s.passageiro?.email }}</span>
+          <span>🕐 {{ s.carona?.dataHora | date:'dd/MM/yyyy HH:mm' }}</span>
+        </div>
+
+        <div class="acoes" *ngIf="s.status === 'PENDENTE'">
+          <button class="btn-aceitar" (click)="confirmar(s.id)">
+            ✅ Aceitar
+          </button>
+          <button class="btn-recusar" (click)="recusar(s.id)">
+            ❌ Recusar
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
