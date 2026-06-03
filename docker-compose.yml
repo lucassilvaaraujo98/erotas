@@ -3,12 +3,17 @@ services:
   mysql:
     image: mysql:8
     environment:
-      MYSQL_ROOT_PASSWORD: erotas123
+      MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: erotas_db
     ports:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+    healthcheck: # <--- Agora com 4 espaços, dentro do escopo do serviço 'mysql'
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"] # <-- Senha 'root' inserida direto para evitar o warning
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
   backend:
     build: ./backend
@@ -17,16 +22,17 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/erotas_db
       SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: erotas123
-      JWT_SECRET: erotas_secret_key_muito_longa_e_segura_12345
+      SPRING_DATASOURCE_PASSWORD: root
+      JWT_SECRET: erotas_secret_key_muito_longa_e_segura_aqui
       JWT_EXPIRATION: 86400000
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
 
   frontend:
     build: ./frontend
     ports:
-      - "80:80"
+      - "80:80" # <-- Note que o front agora vai responder na porta 80 (padrão HTTP) ao invés da 4200!
     depends_on:
       - backend
 

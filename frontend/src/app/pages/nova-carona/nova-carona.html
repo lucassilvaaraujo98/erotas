@@ -1,0 +1,68 @@
+<div class="page">
+
+  <nav class="navbar">
+    <div class="nav-logo">🚗 e-Rotas</div>
+    <div class="nav-links">
+      <button class="btn-nav" (click)="voltar()">← Caronas</button>
+      <button class="btn-sair" (click)="sair()">Sair</button>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <h2 class="titulo">🚙 Oferecer Carona</h2>
+    <p class="subtitulo">Preencha os dados da sua rota e ajude quem precisa</p>
+
+    <div class="card">
+      <form (ngSubmit)="cadastrar()">
+
+        <div class="campo">
+          <label>Origem *</label>
+          <input
+            type="text"
+            [(ngModel)]="origem"
+            name="origem"
+            placeholder="Ex: Centro de Paranaguá"
+            required/>
+        </div>
+
+        <div class="campo">
+          <label>Destino *</label>
+          <input
+            type="text"
+            [(ngModel)]="destino"
+            name="destino"
+            placeholder="Ex: Porto de Paranaguá"
+            required/>
+        </div>
+
+        <div class="campo">
+          <label>Data e horário *</label>
+          <input
+            type="datetime-local"
+            [(ngModel)]="dataHora"
+            name="dataHora"
+            required/>
+        </div>
+
+        <div class="campo">
+          <label>Vagas disponíveis</label>
+          <div class="vagas-control">
+            <button type="button" class="btn-vaga" (click)="vagasDisponiveis = vagasDisponiveis > 1 ? vagasDisponiveis - 1 : 1">−</button>
+            <span class="vagas-num">{{ vagasDisponiveis }}</span>
+            <button type="button" class="btn-vaga" (click)="vagasDisponiveis = vagasDisponiveis < 6 ? vagasDisponiveis + 1 : 6">+</button>
+          </div>
+        </div>
+
+        <div class="erro" *ngIf="erro">{{ erro }}</div>
+        <div class="sucesso" *ngIf="sucesso">{{ sucesso }}</div>
+
+        <button type="submit" [disabled]="carregando">
+          {{ carregando ? 'Cadastrando...' : '✅ Oferecer carona' }}
+        </button>
+
+      </form>
+    </div>
+
+  </div>
+</div>

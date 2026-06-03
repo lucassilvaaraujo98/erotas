@@ -31,5 +31,15 @@ export const routes: Routes = [
       .then(m => m.HistoricoComponent),
     canActivate: [authGuard]
   },
+  {
+    path: 'nova-carona',
+    loadComponent: () => import('./pages/nova-carona/nova-carona')
+      .then(m => m.NovaCaronaComponent),
+    canActivate: [authGuard]
+  },
+
   { path: '**', redirectTo: 'login' }
+
+
+
 ];

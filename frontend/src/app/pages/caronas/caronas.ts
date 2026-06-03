@@ -27,7 +27,7 @@ export class CaronasComponent implements OnInit {
     private solicitacaoService: SolicitacaoService,
     private authService: AuthService,
     private storage: StorageService,
-    private router: Router
+    public router: Router
   ) {}
 
   ngOnInit() {
