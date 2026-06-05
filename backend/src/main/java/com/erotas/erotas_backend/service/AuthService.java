@@ -24,21 +24,30 @@ public class AuthService {
     private final JwtService jwtService;
     private final AuthenticationManager authManager;
 
-    public AuthResponse registrar(RegisterRequest req) {
-        if (usuarioRepository.existsByEmail(req.getEmail())) {
-            throw new ApiException("E-mail já cadastrado", 409);
-        }
-
-        Usuario usuario = req.isMotorista() ? new Motorista() : new Usuario();
-        usuario.setNome(req.getNome());
-        usuario.setEmail(req.getEmail());
-        usuario.setSenha(passwordEncoder.encode(req.getSenha()));
-        usuario.setEndereco(req.getEndereco());
-
-        usuarioRepository.save(usuario);
-        String token = jwtService.gerarToken(usuario);
-        return new AuthResponse(token, usuario.getNome(), usuario.getId());
+public AuthResponse registrar(RegisterRequest req) {
+    if (usuarioRepository.existsByEmail(req.getEmail())) {
+        throw new ApiException("E-mail já cadastrado", 409);
     }
+
+    Usuario usuario;
+
+    if (req.isMotorista()) {
+        Motorista motorista = new Motorista();
+        motorista.setHabilitado(true); // ← habilita automaticamente
+        usuario = motorista;
+    } else {
+        usuario = new Usuario();
+    }
+
+    usuario.setNome(req.getNome());
+    usuario.setEmail(req.getEmail());
+    usuario.setSenha(passwordEncoder.encode(req.getSenha()));
+    usuario.setEndereco(req.getEndereco());
+
+    usuarioRepository.save(usuario);
+    String token = jwtService.gerarToken(usuario);
+    return new AuthResponse(token, usuario.getNome(), usuario.getId());
+}
 
     public AuthResponse login(LoginRequest req) {
         authManager.authenticate(

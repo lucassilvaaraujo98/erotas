@@ -1,0 +1,68 @@
+<div class="page">
+  <nav class="navbar">
+    <div class="nav-logo">🚗 e-Rotas</div>
+    <div class="nav-links">
+      <button class="btn-nav" (click)="voltar()">← Caronas</button>
+      <button class="btn-sair" (click)="sair()">Sair</button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h2 class="titulo">🚙 Minhas Caronas</h2>
+    <p class="subtitulo">Veja suas caronas</p>
+
+    <div class="carregando" *ngIf="carregando">Carregando...</div>
+
+    <div class="vazio" *ngIf="!carregando && mensagem">
+      <div class="vazio-icone">🚗</div>
+      <p>{{ mensagem }}</p>
+      <button class="btn-acao" (click)="router.navigate(['/nova-carona'])">
+        Oferecer uma carona
+      </button>
+    </div>
+
+    <div class="lista" *ngIf="!carregando && caronas.length > 0">
+      <div class="carona-card" *ngFor="let carona of caronas">
+
+        <div class="carona-header">
+          <div class="rota">
+            <span class="origem">📍 {{ carona.origem }}</span>
+            <span class="seta">→</span>
+            <span class="destino">🏁 {{ carona.destino }}</span>
+          </div>
+          <div class="carona-meta">
+            <span>🕐 {{ formatarData(carona.dataHora) }}</span>
+            <span>💺 {{ carona.vagasDisponiveis }} vagas</span>
+          </div>
+        </div>
+
+        <div class="passageiros">
+          <h4>Solicitações</h4>
+
+          <div class="sem-solicitacoes"
+               *ngIf="!carona.solicitacoes || carona.solicitacoes.length === 0">
+            Nenhuma solicitação ainda.
+          </div>
+
+          <div class="passageiro-item"
+               *ngFor="let s of carona.solicitacoes">
+            <div class="passageiro-info">
+              <span class="passageiro-nome">👤 {{ s.nomePassageiro }}</span>
+              <span class="passageiro-email">{{ s.emailPassageiro }}</span>
+            </div>
+            <div class="passageiro-acoes">
+              <span class="status" [class]="corStatus(s.status)">
+                {{ s.status }}
+              </span>
+              <div class="botoes" *ngIf="s.status === 'PENDENTE'">
+                <button class="btn-aceitar" (click)="confirmar(s.id)">✅</button>
+                <button class="btn-recusar" (click)="recusar(s.id)">❌</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -27,7 +27,8 @@ export class CaronasComponent implements OnInit {
     private solicitacaoService: SolicitacaoService,
     private authService: AuthService,
     private storage: StorageService,
-    public router: Router
+    public router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -47,10 +48,12 @@ export class CaronasComponent implements OnInit {
           this.mensagem = 'Nenhuma carona disponível para essa rota.';
         }
         this.carregando = false;
+        this.cdr.detectChanges();
       },
       error: () => {
         this.mensagem = 'Erro ao buscar caronas.';
         this.carregando = false;
+        this.cdr.detectChanges();
       }
     });
   }

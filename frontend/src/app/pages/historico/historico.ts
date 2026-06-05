@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { SolicitacaoService, Solicitacao } from '../../services/solicitacao.service';
@@ -19,6 +19,7 @@ export class HistoricoComponent implements OnInit {
   constructor(
     private solicitacaoService: SolicitacaoService,
     private authService: AuthService,
+    private cdr: ChangeDetectorRef,
     private router: Router
   ) {}
 
@@ -26,24 +27,29 @@ export class HistoricoComponent implements OnInit {
     this.carregarHistorico();
   }
 
-  carregarHistorico() {
-    this.carregando = true;
-    this.mensagem = '';
 
-    this.solicitacaoService.historico().subscribe({
-      next: (dados) => {
-        this.solicitacoes = dados;
-        this.carregando = false;
-        if (dados.length === 0) {
-          this.mensagem = 'Você ainda não fez nenhuma solicitação. Que tal pegar uma carona agora?';
-        }
-      },
-      error: () => {
-        this.mensagem = 'Erro ao carregar histórico.';
-        this.carregando = false;
+carregarHistorico() {
+  this.carregando = true;
+  this.mensagem = '';
+  this.solicitacaoService.historico().subscribe({
+    next: (dados) => {
+      this.solicitacoes = dados;
+      this.carregando = false;
+      if (dados.length === 0) {
+        this.mensagem = 'Você ainda não fez nenhuma solicitação. Que tal pegar uma carona agora?';
       }
-    });
-  }
+      this.cdr.detectChanges();
+    },
+    error: (err) => {
+      console.error('Erro historico:', err.status, err.message);
+      this.mensagem = err.status === 401
+        ? 'Sessão expirada. Faça login novamente.'
+        : 'Erro ao carregar histórico.';
+      this.carregando = false;
+      this.cdr.detectChanges();
+    }
+  });
+}
 
   corStatus(status: string): string {
     switch (status) {

@@ -2,6 +2,7 @@ package com.erotas.erotas_backend.controller;
 
 
 import com.erotas.erotas_backend.config.JwtService;
+import com.erotas.erotas_backend.dto.CaronaComSolicitacoesDTO;
 import com.erotas.erotas_backend.dto.CaronaDTO;
 import com.erotas.erotas_backend.model.Carona;
 import com.erotas.erotas_backend.service.CaronaService;
@@ -41,6 +42,13 @@ public class CaronaController {
         Long id = extrairId(authHeader);
         return ResponseEntity.ok(caronaService.historicoPorMotorista(id));
     }
+
+    @GetMapping("/minhas")
+    public ResponseEntity<List<CaronaComSolicitacoesDTO>> minhasCaronas(
+            @RequestHeader("Authorization") String authHeader) {
+        Long motoristaId = extrairId(authHeader);
+        return ResponseEntity.ok(caronaService.buscarComSolicitacoes(motoristaId));
+}
 
     private Long extrairId(String authHeader) {
         return jwtService.extrairId(authHeader.substring(7));

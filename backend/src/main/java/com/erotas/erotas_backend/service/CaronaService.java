@@ -8,6 +8,9 @@ import com.erotas.erotas_backend.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.erotas.erotas_backend.dto.CaronaComSolicitacoesDTO;
+import com.erotas.erotas_backend.dto.SolicitacaoResumoDTO;
+
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,19 +23,23 @@ public class CaronaService {
     private final UsuarioRepository usuarioRepository;
 
     // RF03 — cadastrar carona
-    @Transactional
-    public CaronaDTO cadastrar(Carona carona, Long motoristaId) {
-        Motorista motorista = (Motorista) usuarioRepository.findById(motoristaId)
-                .orElseThrow(() -> new RuntimeException("Motorista não encontrado"));
+@Transactional
+public CaronaDTO cadastrar(Carona carona, Long motoristaId) {
+    System.out.println(">>> motoristaId recebido: " + motoristaId);
+    
+    Motorista motorista = (Motorista) usuarioRepository.findById(motoristaId)
+        .orElseThrow(() -> new RuntimeException("Motorista não encontrado"));
 
-        if (!motorista.isHabilitado()) {
-            throw new RuntimeException("Motorista não está habilitado");
-        }
+    System.out.println(">>> habilitado: " + motorista.isHabilitado());
 
-        carona.setMotorista(motorista);
-        Carona salva = caronaRepository.save(carona);
-        return toDTO(salva);
+    if (!motorista.isHabilitado()) {
+        throw new RuntimeException("Motorista não está habilitado");
     }
+
+    carona.setMotorista(motorista);
+    Carona salva = caronaRepository.save(carona);
+    return toDTO(salva);
+}
 
     // RF04 — buscar caronas com filtros
     public List<CaronaDTO> buscar(String origem, String destino) {
@@ -69,4 +76,29 @@ public class CaronaService {
         dto.setDisponivel(c.isDisponivel());
         return dto;
     }
+
+    public List<CaronaComSolicitacoesDTO> buscarComSolicitacoes(Long motoristaId) {
+    List<Carona> caronas = caronaRepository
+        .findByMotoristaIdOrderByDataHoraDesc(motoristaId);
+
+    return caronas.stream().map(c -> {
+        List<SolicitacaoResumoDTO> solic = c.getSolicitacoes().stream()
+            .map(s -> new SolicitacaoResumoDTO(
+                s.getId(),
+                s.getPassageiro().getNome(),
+                s.getPassageiro().getEmail(),
+                s.getStatus().name()
+            )).toList();
+
+        return new CaronaComSolicitacoesDTO(
+            c.getId(),
+            c.getOrigem(),
+            c.getDestino(),
+            c.getDataHora(),
+            c.getVagasDisponiveis(),
+            c.isDisponivel(),
+            solic
+        );
+    }).toList();
+}
 }

@@ -6,6 +6,8 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
   const storage = inject(StorageService);
   const token = storage.getToken();
 
+  console.log(`[JWT] ${req.method} ${req.url} | token: ${token ? 'OK' : 'VAZIO'}`);
+
   if (token) {
     req = req.clone({
       setHeaders: { Authorization: `Bearer ${token}` }

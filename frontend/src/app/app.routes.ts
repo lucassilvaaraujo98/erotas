@@ -20,6 +20,12 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
+    path: 'minhas-caronas',
+    loadComponent: () => import('./pages/minhas-caronas/minhas-caronas')
+      .then(m => m.MinhasCaronasComponent),
+    canActivate: [authGuard]
+  },
+  {
     path: 'solicitacoes',
     loadComponent: () => import('./pages/solicitacoes/solicitacoes')
       .then(m => m.SolicitacoesComponent),

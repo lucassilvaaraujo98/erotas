@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { SolicitacaoService, Solicitacao } from '../../services/solicitacao.service';
@@ -19,32 +19,34 @@ export class SolicitacoesComponent implements OnInit {
   constructor(
     private solicitacaoService: SolicitacaoService,
     private authService: AuthService,
+    private cdr: ChangeDetectorRef,
     private router: Router
   ) {}
 
-  ngOnInit() {
-    this.carregar();
-  }
+ngOnInit() { this.carregar(); }
 
-  carregar() {
-    this.carregando = true;
-    this.mensagem = '';
-
-    this.solicitacaoService.listarTodas().subscribe({
-      next: (dados) => {
-        console.log('Solicitações:', dados);
-        this.solicitacoes = dados;
-        this.carregando = false;
-        if (dados.length === 0) {
-          this.mensagem = 'Nenhuma solicitação pendente no momento. Volte mais tarde!';
-        }
-      },
-      error: () => {
-        this.mensagem = 'Erro ao carregar solicitações.';
-        this.carregando = false;
+carregar() {
+  this.carregando = true;
+  this.mensagem = '';
+  this.solicitacaoService.listarTodas().subscribe({
+    next: (dados) => {
+      this.solicitacoes = dados;
+      this.carregando = false;
+      if (dados.length === 0) {
+        this.mensagem = 'Nenhuma solicitação no momento. Volte mais tarde!';
       }
-    });
-  }
+      this.cdr.detectChanges();
+    },
+    error: (err) => {
+      console.error('Erro solicitacoes:', err.status, err.message);
+      this.mensagem = err.status === 401
+        ? 'Sessão expirada. Faça login novamente.'
+        : 'Erro ao carregar solicitações.';
+      this.carregando = false;
+      this.cdr.detectChanges();
+    }
+  });
+}
 
   confirmar(id: number) {
     this.solicitacaoService.confirmar(id).subscribe({

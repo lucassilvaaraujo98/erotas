@@ -11,6 +11,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 // model/Carona.java
 @Entity
 @Table(name = "carona")
@@ -36,11 +39,13 @@ public class Carona {
     @Column(nullable = false)
     private int vagasDisponiveis;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "motorista_id", nullable = false)
+    @JsonIgnoreProperties({"caronas", "senha", "solicitacoes"})
     private Motorista motorista;
 
     @OneToMany(mappedBy = "carona", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Solicitacao> solicitacoes = new ArrayList<>();
 
     public boolean isDisponivel() {
