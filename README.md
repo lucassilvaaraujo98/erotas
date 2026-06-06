@@ -35,8 +35,8 @@ Não é necessário instalar Java, Maven, Node ou Angular — o Docker cuida de 
 
 ### 1. Clone o repositório
 
-```bash
-git clone https://github.com/lucassilvaaraujo98/erotas.git
+```bash 
+git clone -b docker (https://github.com/lucassilvaaraujo98/erotas.git)
 cd erotas
 ```
 
